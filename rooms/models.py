@@ -34,13 +34,16 @@ class Reservation(models.Model):
         if self.start < timezone.now():
             raise ValidationError("Nie można tworzyć rezerwacji w przeszłości.")
 
+        conflict = Reservation.objects.filter(
+            room=self.room,
+            start__lt=self.end,
+            end__gt=self.start,
+        ).exclude(pk=self.pk)
+
+        if conflict.exists():
+            raise ValidationError("Sala jest już zajęta w tym czasie.")
+
     class Meta:
-        constraints = [
-            models.CheckConstraint(
-                check=Q(end__gt=F("start")),
-                name="reservation_end_after_start",
-            )
-        ]
         ordering = ["start"]
 
     def __str__(self):
