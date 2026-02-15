@@ -56,7 +56,7 @@ ROOT_URLCONF = 'rejestracja.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -120,5 +120,5 @@ STATIC_URL = 'static/'
 
 
 LOGIN_URL = "/accounts/login/"
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/rooms/"
 LOGOUT_REDIRECT_URL = "/accounts/login/"
