@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ReservationForm
 from .models import Reservation, Room
 from django.contrib import messages
@@ -48,3 +48,18 @@ def rooms_home(request):
         "selected_room": selected_room,
         "only_mine": only_mine,
     })
+
+@login_required
+def reservation_delete(request, pk):
+    reservation = get_object_or_404(Reservation, pk=pk)
+
+    if reservation.created_by != request.user:
+        messages.error(request, "Nie możesz usuwać cudzej rezerwacji.")
+        return redirect("rooms:rooms_home")
+
+    if request.method == "POST":
+        reservation.delete()
+        messages.success(request, "Rezerwacja usunięta.")
+        return redirect("rooms:rooms_home")
+
+    return redirect("rooms:rooms_home")
