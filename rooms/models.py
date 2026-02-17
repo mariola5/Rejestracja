@@ -11,7 +11,7 @@ class Room(models.Model):
     location = models.CharField(max_length=200, blank=True)
     is_active = models.BooleanField(default=True)
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.capacity} osób)"
 
 
 class Reservation(models.Model):
